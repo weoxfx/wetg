@@ -1,0 +1,6 @@
+WETG "Super Weox"
+
+bot "TOKEN"
+
+on /start
+  send "Hello! I am made by WeTG"
