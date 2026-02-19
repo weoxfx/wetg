@@ -141,13 +141,13 @@ call greet
 3. Click **Run**
 4. Your bot is live instantly — no Python knowledge needed
 
-![Replit Example](https://i.imgur.com/3u3Bq3Y.png)
+
 
 ---
 
 ## 🔹 Contributing / Adding Examples
 
-* Add new `.wetg` scripts to `examples/` folder
+* Add new `.wetg` scripts
 * Make your own bots and share them
 * Keep the syntax **simple, readable, beginner-friendly**
 
