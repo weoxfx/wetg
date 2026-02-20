@@ -145,19 +145,29 @@ class Wetg:
                         pass
 
                     if send_type == "button":
-                        # look backward for button definition
                         keyboard = None
-                        for j in range(i - 1, -1, -1):
-                            if block[j][1].startswith("button ="):
-                                btn_part = block[j][1].split("=", 1)[1].strip()
-                                try:
-                                    btn_label, btn_url = btn_part.strip("[]").replace('"', '').split(",", 1)
-                                    keyboard = InlineKeyboardMarkup([[
-                                        InlineKeyboardButton(btn_label.strip(), url=btn_url.strip())
-                                    ]])
-                                except Exception:
-                                    pass
-                                break
+                        btn_raw = local_vars.get("button", None)
+                        if btn_raw:
+                            try:
+                                btn_label, btn_url = str(btn_raw).strip("[]").replace('"', '').replace("'", '').split(",", 1)
+                                keyboard = InlineKeyboardMarkup([[
+                                    InlineKeyboardButton(btn_label.strip(), url=btn_url.strip())
+                                ]])
+                            except Exception:
+                                pass
+                        else:
+                            for j in range(i - 1, -1, -1):
+                                bline = block[j][1]
+                                if bline.startswith("button =") or bline.startswith("set button ="):
+                                    btn_part = bline.split("=", 1)[1].strip()
+                                    try:
+                                        btn_label, btn_url = btn_part.strip("[]").replace('"', '').split(",", 1)
+                                        keyboard = InlineKeyboardMarkup([[
+                                            InlineKeyboardButton(btn_label.strip(), url=btn_url.strip())
+                                        ]])
+                                    except Exception:
+                                        pass
+                                    break
                         await update.message.reply_text(text, reply_markup=keyboard)
 
                     elif send_type == "image":
