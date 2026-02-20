@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wetg"
-version = "7.0.0"
+version = "7.0.1"
 description = "WETG v7 Super Weox — One-File Telegram Bot Engine. Write Telegram bots in a simple scripting language."
 readme = "README.md"
 license = { text = "MIT" }
@@ -26,7 +26,7 @@ dependencies = [
 ]
 
 [project.scripts]
-wetg = "wetg_superweox.__main__:main"
+wetg = "wetg.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/weoxfx/wetg"
