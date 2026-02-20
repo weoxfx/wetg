@@ -1,172 +1,172 @@
 # 🔥 WETG v7 — Super Weox
 
-> **One-File Telegram Bot Engine** — Write Telegram bots in a simple scripting language, no boilerplate needed.
+> **One-File Telegram Bot Engine** — Write Telegram bots in a simple scripting language. No boilerplate. No classes. Just write.
+
+```
+pip install wetg
+```
 
 ---
 
-## 📦 Installation
-
-### 1. Install Python dependencies
+## ⚡ Quick Start
 
 ```bash
-pip install -r requirements.txt
-```
-
-> On Termux / system Python (no virtualenv):
-> ```bash
-> pip install -r requirements.txt --break-system-packages
-> ```
-
-### 2. Make the launcher executable
-
-```bash
-chmod +x wetg.sh
-```
-
-### 3. (Optional) Add `wetg` to your PATH
-
-```bash
-# Termux
-cp wetg.sh $PREFIX/bin/wetg
-
-# Linux / macOS
-sudo cp wetg.sh /usr/local/bin/wetg
-```
-
-Now you can run `wetg` from anywhere.
-
----
-
-## 🚀 Quick Start
-
-```bash
-# Create a new bot from template
+# Create a bot from template
 wetg new mybot.wetg
 
-# Edit the file and add your token from @BotFather
+# Edit it, add your token from @BotFather
 nano mybot.wetg
 
 # Run it
 wetg run mybot.wetg
 ```
 
----
-
-## 📝 WETG Language Reference
-
-### Bot Token
-
-```
-bot "123456789:ABC-your-token-here"
-```
-
-Or put it in `config.txt` (safer, don't commit to git):
-
-```
-TOKEN=123456789:ABC-your-token-here
-```
+That's it.
 
 ---
 
-### Commands
+## 📝 Language
 
-Register a Telegram `/command`:
+### Hello World bot
 
 ```
+bot "YOUR_TOKEN_HERE"
+
 on /start
-    send "Hello, {user.name}!"
+    send "Hello, {user.name}! 👋"
 
 on /ping
     send "🏓 Pong!"
 ```
 
----
-
-### Sending Messages
+### Full feature example
 
 ```
-send "Hello!"
-send "Hi {user.name}, your ID is {user.id}"
+bot "YOUR_TOKEN_HERE"
 
-# With Markdown formatting
-send "*bold* and _italic_" with markdown
+set welcome=Hello!
 
-# With HTML formatting
-send "<b>bold</b>" with html
-
-# With an inline button
-button = ["Click me", "https://example.com"]
-send "Check this out!" with button
-
-# With an image (local file or URL)
-send "photo.jpg" with image
-send "https://example.com/image.jpg" with image
-```
-
----
-
-### Variables
-
-```
-set greeting=Hello there
+# ── Commands ──────────────────────────────
 
 on /start
-    send "{greeting}, {user.name}!"
-```
+    send "👋 Hi {user.name}! {welcome}"
 
----
+on /help
+    send "/start\n/ping\n/echo\n/about"
 
-### Asking Questions
+on /ping
+    send "🏓 Pong!"
 
-```
+on /about
+    button = ["Our Website", "https://example.com"]
+    send "Powered by WETG v7 Super Weox." with button
+
 on /echo
-    ask "What should I repeat?"
+    ask "What should I echo?"
 
-on usermsg
-    send "You said: {usermsg}"
-```
+# ── User messages ─────────────────────────
 
-> After `ask`, the bot waits for the user's next message and stores it in `{usermsg}`.
-
----
-
-### Handling User Messages
-
-```
 on usermsg
     if {usermsg} == "hi"
         send "Hey! 👋"
     elif {usermsg} == "bye"
         send "See ya! 👋"
     else
-        send "I got: {usermsg}"
+        send "You said: {usermsg}"
+
+# ── Functions ─────────────────────────────
+
+function welcome_user
+    send "Welcome, {user.name}!"
+    send "Your ID: {user.id}"
 ```
 
 ---
+
+## 📖 Language Reference
+
+### Token
+
+```
+bot "YOUR_TOKEN"
+```
+
+Or use `config.txt` (recommended — don't commit tokens to git):
+```
+TOKEN=YOUR_TOKEN
+```
+
+### Sending messages
+
+| Syntax | Description |
+|--------|-------------|
+| `send "text"` | Plain message |
+| `send "{user.name}"` | With variable interpolation |
+| `send "**bold**" with markdown` | Markdown formatting |
+| `send "<b>bold</b>" with html` | HTML formatting |
+| `send "photo.jpg" with image` | Local image file |
+| `send "https://..." with image` | Image from URL |
+| `button = ["Label", "url"]` then `send "text" with button` | Inline button |
+
+### Variables
+
+| Variable | Value |
+|----------|-------|
+| `{user.name}` | User's first name |
+| `{user.id}` | User's Telegram ID |
+| `{user.username}` | User's @username |
+| `{bot.name}` | Bot display name |
+| `{bot.username}` | Bot @username |
+| `{usermsg}` | Last message text from user |
+
+### Control flow
+
+```
+if {usermsg} == "yes"
+    send "You said yes!"
+elif {usermsg} == "no"
+    send "You said no."
+else
+    send "You said something else."
+```
 
 ### Loops
 
 ```
-on /count
-    loop 3 times
-        send "Counting..."
-    stop
+loop 5 times
+    send "Looping!"
+stop
 ```
 
----
+### Ask / input
+
+```
+on /form
+    ask "What's your name?"
+
+on usermsg
+    send "Nice to meet you, {usermsg}!"
+```
 
 ### Functions
 
 ```
 function greet
     send "Hi {user.name}!"
-    send "Welcome to the bot."
 
 on /start
     call greet
 ```
 
----
+### Variables (set)
+
+```
+set counter=0
+
+on /start
+    set counter=1
+    send "Counter is {counter}"
+```
 
 ### Imports
 
@@ -174,64 +174,61 @@ on /start
 import random
 
 on /roll
-    send "🎲 You rolled a {random.randint(1, 6)}!"
+    send "🎲 {random.randint(1, 6)}"
 ```
 
 ---
 
-## 🔤 Available Variables
+## 🐍 Python API
 
-| Variable | Description |
-|---|---|
-| `{user.name}` | User's first name |
-| `{user.id}` | User's Telegram ID |
-| `{user.username}` | User's @username |
-| `{bot.name}` | Bot's display name |
-| `{bot.username}` | Bot's @username |
-| `{usermsg}` | Last message text sent by user |
+```python
+from wetg_superweox import Wetg
+import asyncio
+
+code = """
+bot "YOUR_TOKEN"
+
+on /start
+    send "Hello from Python API!"
+"""
+
+bot = Wetg(code)
+bot.parse()
+asyncio.run(bot.run())
+```
+
+Or use the helper:
+
+```python
+from wetg_superweox import run_file
+
+run_file("mybot.wetg")
+```
 
 ---
 
-## 🛠 CLI Reference
+## 🛠 CLI
 
 ```
 wetg run <file.wetg>     Run a bot
-wetg new <file.wetg>     Create a bot from template
-wetg check <file.wetg>   Validate your .wetg file
-wetg version             Show WETG version
+wetg new <file.wetg>     Create bot from template
+wetg check <file.wetg>   Validate .wetg file
+wetg version             Show version
 wetg help                Show help
 ```
 
 Shortcuts:
-
 ```bash
-# These are equivalent
-wetg run mybot.wetg
-wetg mybot.wetg
-python wetg.py mybot.wetg
-python wetg.py run mybot.wetg
+wetg mybot.wetg           # same as: wetg run mybot.wetg
+python -m wetg_superweox run mybot.wetg
 ```
 
 ---
 
-## 📁 Project Structure
+## 🔒 Tips
 
-```
-wetg/
-├── wetg.py           # The interpreter
-├── wetg.sh           # CLI launcher (wetg command)
-├── requirements.txt  # Python dependencies
-├── example.wetg      # Example bot
-├── config.txt        # (optional) TOKEN=... — don't commit this!
-└── README.md
-```
-
----
-
-## 🔒 Security Tips
-
-- Never hardcode your token in `.wetg` files you share or commit to git.
-- Use `config.txt` for your token and add it to `.gitignore`:
+- Store tokens in `config.txt`, not in `.wetg` files
+- Add to `.gitignore`:
   ```
   config.txt
   .env
@@ -239,41 +236,6 @@ wetg/
 
 ---
 
-## 📋 Example Bot
-
-```
-bot "YOUR_TOKEN"
-
-set welcome=Hello!
-
-on /start
-    send "👋 Hi {user.name}! {welcome}"
-
-on /ping
-    send "🏓 Pong!"
-
-on /echo
-    ask "What should I echo?"
-
-on usermsg
-    send "Echo: {usermsg}"
-```
-
----
-
-## 🐛 Troubleshooting
-
-**`RuntimeError: This event loop is already running`**
-Fixed in v7 — WETG now uses the low-level async API instead of `run_polling()`.
-
-**`python-telegram-bot` version issues**
-Make sure you have v20+: `pip install "python-telegram-bot>=20.0"`
-
-**Bot not responding**
-Run `wetg check mybot.wetg` to validate your file, and make sure your token is correct.
-
----
-
 ## 📜 License
 
-MIT — do whatever you want with it.
+MIT

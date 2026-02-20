@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wetg"
+version = "7.0.0"
+description = "WETG v7 Super Weox — One-File Telegram Bot Engine. Write Telegram bots in a simple scripting language."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+keywords = ["telegram", "bot", "wetg", "scripting", "dsl"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+    "Topic :: Software Development :: Interpreters",
+]
+dependencies = [
+    "python-telegram-bot>=20.0",
+]
+
+[project.scripts]
+wetg = "wetg_superweox.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/weoxfx/wetg"
+Issues = "https://github.com/weoxfx/wetg/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["wetg*"]
